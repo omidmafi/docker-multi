@@ -20,4 +20,17 @@ after_success:
     - docker push omidmafi/multi-nginx
     - docker push omidmafi/multi-server
     - docker push omidmafi/multi-worker
+
+    deploy:
+        provider: elasticbeanstalk
+        region: "us-east-2"
+        name: "multi-docker"
+        env: "MultiDocker-env"
+        bucket_name: "elasticbeanstalk-us-east-2-698985873767"
+        bucket_path: "docker-multi"
+        on:
+            branch: master
+        access_key_id: $AWS_ACCESS_KEY
+        secret_access_key:
+            secure: $AWS_SECRET_KEY
     
