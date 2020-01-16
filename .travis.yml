@@ -6,7 +6,7 @@ before_install:
     - docker build -f ./client/Dockerfile.dev -t omidmafi/react-test ./client
 
 script:
-    - docker run -e:CI=true omidmafi/react-test npm test
+    - docker run -e CI=true omidmafi/react-test npm run test
 
 after_success:
     - docker build -t omidmafi/multi-client ./client
