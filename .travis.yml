@@ -1,0 +1,23 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -f ./client/Dockerfile.dev -t omidmafi/react-test ./client
+
+script:
+    - docker run -e:CI=true omidmafi/react-test npm test
+
+after_success:
+    - docker build -t omidmafi/multi-client ./client
+    - docker build -t omidmafi/multi-nginx ./nginx
+    - docker build -t omidmafi/multi-worker ./worker
+    - docker build -t omidmafi/multi-server ./server
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    
+    - docker push omidmafi/multi-client
+    - docker push omidmafi/multi-nginx
+    - docker push omidmafi/multi-server
+    - docker push omidmafi/multi-worker
+    
